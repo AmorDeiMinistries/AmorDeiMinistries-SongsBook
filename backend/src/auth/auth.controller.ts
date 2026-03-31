@@ -27,10 +27,11 @@ export class AuthController {
     );
 
     res.cookie('admin_token', result.access_token, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: true,
-    });
+  httpOnly: true,
+  sameSite: 'none',
+  secure: true,
+  path: '/',
+});
 
     return { message: 'Login successful' };
   }
