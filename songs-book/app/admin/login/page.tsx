@@ -18,8 +18,7 @@ const handleLogin = async (e: React.FormEvent) => {
   try {
     await loginAdmin(username, password)
 
-    router.push("/admin")
-    router.refresh()
+    window.location.replace("/admin")
   } catch (error) {
     setMessage(
       error instanceof Error
