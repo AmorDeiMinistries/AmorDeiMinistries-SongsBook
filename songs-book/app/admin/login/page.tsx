@@ -12,21 +12,23 @@ export default function AdminLoginPage() {
   const router = useRouter()
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setMessage("")
+  e.preventDefault()
+  setMessage("")
 
-    try {
-      await loginAdmin(username, password)
+  try {
+    const response = await loginAdmin(username, password)
 
-      router.push("/admin")
-   } catch (error) {
-  setMessage(
-    error instanceof Error
-      ? error.message
-      : "Login failed. Please check your connection."
-  )
-}
+    localStorage.setItem("admin_token", response.access_token)
+
+    router.push("/admin")
+  } catch (error) {
+    setMessage(
+      error instanceof Error
+        ? error.message
+        : "Login failed. Please check your connection."
+    )
   }
+}
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-100 via-white to-slate-200 px-6">
