@@ -2,15 +2,13 @@
 
 import Link from "next/link";
 import { PlusCircle, Music, LayoutGrid, ArrowRight, LogOut } from "lucide-react";
+import { logoutAdmin } from "@/lib/api"
 
 export default function AdminDashboard() {
-  const handleLogout = async () => {
-    await fetch("http://localhost:3000/auth/logout", {
-      method: "POST",
-      credentials: "include",
-    });
-    window.location.href = "/admin/login";
-  };
+ const handleLogout = async () => {
+  await logoutAdmin()
+  window.location.href = "/admin/login"
+}
 
   return (
     <main className="min-h-screen bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-slate-50 via-white to-slate-100 px-6 py-12 md:py-20">

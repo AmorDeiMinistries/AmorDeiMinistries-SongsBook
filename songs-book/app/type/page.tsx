@@ -1,4 +1,5 @@
 "use client"
+import { fetchCategories } from "@/lib/api"
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -12,17 +13,16 @@ export default function SongTypesPage() {
   const [categories, setCategories] = useState<Category[]>([])
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const loadCategories = async () => {
       try {
-        const res = await fetch("http://localhost:3000/categories")
-        const data = await res.json()
-        setCategories(data)
-      } catch (error) {
-        console.error("Failed to fetch categories")
-      }
+  const data = await fetchCategories()
+  setCategories(data)
+} catch (error) {
+  console.error("Failed to fetch categories")
+}
     }
 
-    fetchCategories()
+    loadCategories()
   }, [])
 
 return (

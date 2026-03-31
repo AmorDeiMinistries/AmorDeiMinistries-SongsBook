@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { fetchSongsByLetter } from "@/lib/api"
 
 type Song = {
   id: string
@@ -8,17 +9,6 @@ type Song = {
   lyrics: string
 }
 
-async function getSongs() {
-  const res = await fetch("http://localhost:3000/songs", {
-    cache: "no-store",
-  })
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch songs")
-  }
-
-  return res.json()
-}
 
 export default async function LetterPage({
   params,
@@ -28,11 +18,7 @@ export default async function LetterPage({
   const { letter } = await params
   const decodedLetter = decodeURIComponent(letter)
 
-  const songs: Song[] = await getSongs()
-
-  const filteredSongs = songs.filter((song) =>
-    song.title.trim().startsWith(decodedLetter)
-  )
+const filteredSongs = await fetchSongsByLetter(decodedLetter)
 
   return (
     <main className="min-h-screen overflow-x-hidden">

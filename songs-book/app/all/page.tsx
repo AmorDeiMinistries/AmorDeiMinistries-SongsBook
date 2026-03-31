@@ -1,28 +1,13 @@
 import Link from "next/link"
 import { Music } from "lucide-react"
+import { fetchSongs, type Song } from "@/lib/api"
 
-interface Song {
-  id: string
-  title: string
-  slug: string
-  category: string
-  lyrics: string
-}
 
-async function getSongs() {
-  const res = await fetch("http://localhost:3000/songs", {
-    cache: "no-store",
-  })
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch songs")
-  }
 
-  return res.json()
-}
 
 export default async function AllSongsPage() {
-  const songs: Song[] = await getSongs()
+const songs: Song[] = await fetchSongs()
 
   songs.sort((a, b) => a.title.localeCompare(b.title, "te"))
 

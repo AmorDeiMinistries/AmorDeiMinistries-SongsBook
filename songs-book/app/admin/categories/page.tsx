@@ -2,6 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { Tag, Plus, Trash2, CheckCircle, AlertCircle, Layers } from "lucide-react"
+import {
+  fetchCategories,
+  createCategory,
+  deleteCategory,
+} from "@/lib/api"
 
 interface Category {
   id: number
@@ -13,41 +18,28 @@ export default function ManageCategoriesPage() {
   const [newCategory, setNewCategory] = useState("")
   const [message, setMessage] = useState("")
 
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch("http://localhost:3000/categories")
-      const data = await res.json()
-      setCategories(data)
-    } catch {
-      setMessage("Error: Failed to fetch categories")
-    }
+  const loadCategories = async () => {
+  try {
+  const data = await fetchCategories()
+  setCategories(data)
+} catch {
+  setMessage("Error: Failed to fetch categories")
+}
   }
 
   useEffect(() => {
-    fetchCategories()
+    loadCategories()
   }, [])
 
   const handleAdd = async () => {
     if (!newCategory.trim()) return
 
     try {
-      const res = await fetch("http://localhost:3000/categories", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: newCategory,
-        }),
-      })
-
-      if (!res.ok) {
-        throw new Error()
-      }
+      await createCategory(newCategory)
 
       setMessage("Success: Category added successfully")
       setNewCategory("")
-      fetchCategories()
+      loadCategories()
     } catch {
       setMessage("Error: Failed to add category")
     }
@@ -61,22 +53,10 @@ export default function ManageCategoriesPage() {
     if (!confirmDelete) return
 
     try {
-      const res = await fetch(
-        `http://localhost:3000/categories/${id}`,
-        {
-          method: "DELETE",
-        }
-      )
-
-      const data = await res.json()
-
-      if (!res.ok) {
-        setMessage(data.message || "Error: Delete failed")
-        return
-      }
+      await deleteCategory(id)
 
       setMessage("Success: Category deleted successfully")
-      fetchCategories()
+      loadCategories()
     } catch {
       setMessage("Error: Failed to delete category")
     }

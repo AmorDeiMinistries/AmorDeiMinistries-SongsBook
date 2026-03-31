@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Music, Globe, Type, ListTree, Send, CheckCircle, AlertCircle } from "lucide-react"
+import { fetchCategories, createSong } from "@/lib/api"
 
 interface Category {
   id: number
@@ -17,18 +18,17 @@ export default function AddSongPage() {
   const [categories, setCategories] = useState<Category[]>([])
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch("http://localhost:3000/categories")
-        const data = await res.json()
-        setCategories(data)
-      } catch (error) {
-        setMessage("Error: Failed to fetch categories")
-      }
+  const loadCategories = async () => {
+    try {
+      const data = await fetchCategories()
+      setCategories(data)
+    } catch (error) {
+      setMessage("Error: Failed to fetch categories")
     }
+  }
 
-    fetchCategories()
-  }, [])
+  loadCategories()
+}, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -42,17 +42,9 @@ export default function AddSongPage() {
         lyrics,
       }
 
-      const res = await fetch("http://localhost:3000/songs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newSong),
-      })
+     await createSong(newSong)
 
-      if (!res.ok) {
-        throw new Error("Failed to add song")
-      }
+      
 
       setMessage("Success: Song Added Successfully")
       setTitle("")

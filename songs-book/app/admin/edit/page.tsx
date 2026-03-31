@@ -2,14 +2,13 @@
 
 import { useEffect, useState } from "react"
 import { Search, Edit2, Trash2, X, Music, CheckCircle, AlertCircle } from "lucide-react"
+import {
+  fetchSongs,
+  deleteSong,
+  updateSong,
+  type Song,
+} from "@/lib/api"
 
-interface Song {
-  id: number
-  title: string
-  slug: string
-  category: string
-  lyrics: string
-}
 
 export default function ManageSongsPage() {
   const [songs, setSongs] = useState<Song[]>([])
@@ -33,18 +32,17 @@ export default function ManageSongsPage() {
     normalizeText(song.slug).includes(normalizeText(searchTerm))
   )
 
-  const fetchSongs = async () => {
-    try {
-      const res = await fetch("http://localhost:3000/songs")
-      const data = await res.json()
-      setSongs(data)
-    } catch (error) {
-      setMessage("Error: Failed to fetch songs")
-    }
+  const loadSongs = async () => {
+ try {
+  const data = await fetchSongs()
+  setSongs(data)
+} catch (error) {
+  setMessage("Error: Failed to fetch songs")
+}
   }
 
   useEffect(() => {
-    fetchSongs()
+    loadSongs()
   }, [])
 
   const handleDelete = async (id: number) => {
@@ -55,19 +53,9 @@ export default function ManageSongsPage() {
     if (!confirmDelete) return
 
     try {
-      const res = await fetch(
-        `http://localhost:3000/songs/${id}`,
-        {
-          method: "DELETE",
-        }
-      )
-
-      if (!res.ok) {
-        throw new Error("Delete failed")
-      }
-
+     await deleteSong(id)
       setMessage("Success: Song deleted successfully")
-      fetchSongs()
+      loadSongs()
     } catch (error) {
       setMessage("Error: Failed to delete song")
     }
@@ -84,29 +72,16 @@ export default function ManageSongsPage() {
     if (!editingSong) return
 
     try {
-      const res = await fetch(
-        `http://localhost:3000/songs/${editingSong.id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title: editTitle,
-            lyrics: editLyrics,
-          }),
-        }
-      )
-
-      if (!res.ok) {
-        throw new Error("Update failed")
-      }
+    await updateSong(editingSong.id, {
+  title: editTitle,
+  lyrics: editLyrics,
+})
 
       setMessage("Success: Song updated successfully")
       setEditingSong(null)
       setEditTitle("")
       setEditLyrics("")
-      fetchSongs()
+      loadSongs()
     } catch (error) {
       setMessage("Error: Failed to update song")
     }

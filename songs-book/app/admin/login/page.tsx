@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Lock, User, ShieldCheck, AlertCircle } from "lucide-react"
+import { loginAdmin } from "@/lib/api"
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState("")
@@ -15,32 +16,16 @@ export default function AdminLoginPage() {
     setMessage("")
 
     try {
-      const res = await fetch(
-        "http://localhost:3000/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            username,
-            password,
-          }),
-        }
-      )
-
-      const data = await res.json()
-
-      if (!res.ok) {
-        setMessage(data.message || "Invalid credentials")
-        return
-      }
+      await loginAdmin(username, password)
 
       router.push("/admin")
-    } catch {
-      setMessage("Login failed. Please check your connection.")
-    }
+   } catch (error) {
+  setMessage(
+    error instanceof Error
+      ? error.message
+      : "Login failed. Please check your connection."
+  )
+}
   }
 
   return (

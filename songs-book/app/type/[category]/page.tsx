@@ -1,4 +1,6 @@
 import Link from "next/link"
+import { fetchSongsByCategory } from "@/lib/api"
+
 
 type Song = {
   id: string
@@ -8,17 +10,7 @@ type Song = {
   lyrics: string
 }
 
-async function getSongs() {
-  const res = await fetch("http://localhost:3000/songs", {
-    cache: "no-store",
-  })
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch songs")
-  }
-
-  return res.json()
-}
 
 export default async function CategoryPage({
   params,
@@ -28,11 +20,7 @@ export default async function CategoryPage({
   const { category } = await params
   const decodedCategory = decodeURIComponent(category)
 
-  const songs: Song[] = await getSongs()
-
-  const filteredSongs = songs.filter(
-    (song) => song.category === decodedCategory
-  )
+ const filteredSongs = await fetchSongsByCategory(decodedCategory)
 
   return (
     <main className="min-h-screen overflow-x-hidden">

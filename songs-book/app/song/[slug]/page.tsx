@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import AddToCollectionButton from "@/app/components/AddToCollectionButton"
 import NoCopyLyrics from "@/app/NoCopyLyrics"
+import { fetchSongBySlug } from "@/lib/api"
 
 interface Song {
   id: string
@@ -10,17 +11,7 @@ interface Song {
   lyrics: string
 }
 
-async function getSongs() {
-  const res = await fetch("http://localhost:3000/songs", {
-    cache: "no-store",
-  })
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch songs")
-  }
-
-  return res.json()
-}
 
 export default async function SongPage({
   params,
@@ -29,9 +20,7 @@ export default async function SongPage({
 }) {
   const { slug } = await params
 
-  const songs: Song[] = await getSongs()
-
-  const song = songs.find((s) => s.slug === slug)
+  const song = await fetchSongBySlug(slug)
 
   if (!song) notFound()
 
