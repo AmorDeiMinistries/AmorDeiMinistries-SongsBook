@@ -11,16 +11,15 @@ export default function AdminLoginPage() {
   const [message, setMessage] = useState("")
   const router = useRouter()
 
-  const handleLogin = async (e: React.FormEvent) => {
+const handleLogin = async (e: React.FormEvent) => {
   e.preventDefault()
   setMessage("")
 
   try {
-    const response = await loginAdmin(username, password)
-
-    localStorage.setItem("admin_token", response.access_token)
+    await loginAdmin(username, password)
 
     router.push("/admin")
+    router.refresh()
   } catch (error) {
     setMessage(
       error instanceof Error

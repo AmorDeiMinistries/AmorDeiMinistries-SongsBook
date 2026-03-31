@@ -29,7 +29,7 @@ export class AuthController {
     res.cookie('admin_token', result.access_token, {
       httpOnly: true,
       sameSite: 'lax',
-      secure: false,
+      secure: true,
     });
 
     return { message: 'Login successful' };
