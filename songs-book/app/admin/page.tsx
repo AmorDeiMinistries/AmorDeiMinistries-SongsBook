@@ -1,15 +1,30 @@
 "use client";
 
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+
 import Link from "next/link";
 import { PlusCircle, Music, LayoutGrid, ArrowRight, LogOut } from "lucide-react";
 import { logoutAdmin } from "@/lib/api"
 
 export default function AdminDashboard() {
- const handleLogout = async () => {
+  const router = useRouter()
+
+  useEffect(() => {
+    const token = localStorage.getItem("admin_token")
+
+    if (!token) {
+      router.replace("/admin/login")
+    }
+  }, [router])
+
+  const handleLogout = async () => {
+  localStorage.removeItem("admin_token")
+
   await logoutAdmin()
+
   window.location.href = "/admin/login"
 }
-
   return (
     <main className="min-h-screen bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-slate-50 via-white to-slate-100 px-6 py-12 md:py-20">
       <div className="max-w-6xl mx-auto">

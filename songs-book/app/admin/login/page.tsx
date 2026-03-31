@@ -15,11 +15,16 @@ const handleLogin = async (e: React.FormEvent) => {
   e.preventDefault()
   setMessage("")
 
-  try {
-    await loginAdmin(username, password)
+try {
+  const response = await loginAdmin(username, password)
 
-    window.location.replace("/admin")
-  } catch (error) {
+  localStorage.setItem(
+    "admin_token",
+    response.access_token
+  )
+
+  window.location.replace("/admin")
+} catch (error) {
     setMessage(
       error instanceof Error
         ? error.message
