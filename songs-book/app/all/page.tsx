@@ -57,7 +57,12 @@ const songs: Song[] = await fetchSongs()
         {/* 3. 3D FLOATING CARDS */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 perspective-2000">
           {songs.map((song, index) => (
-            <Link key={song.id} href={`/song/${song.slug}`} className="group">
+           <Link
+  key={song.id}
+  href={`/song/${song.slug}`}
+  prefetch={false}
+  className="group"
+>
               <div
                 className="
                   relative
