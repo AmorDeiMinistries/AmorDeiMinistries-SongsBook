@@ -11,10 +11,10 @@ export class SongsService {
   ) {}
 
   findAll() {
-    return this.songsRepository.find({
-      order: { createdAt: 'DESC' },
-    });
-  }
+  return this.songsRepository.find({
+    order: { title: 'ASC' },
+  });
+}
 
   create(songData: Partial<Song>) {
     const song = this.songsRepository.create(songData);
@@ -28,4 +28,27 @@ export class SongsService {
   delete(id: number) {
     return this.songsRepository.delete(id);
   }
+
+  findBySlug(slug: string) {
+    return this.songsRepository.findOne({
+      where: { slug },
+    });
+  }
+
+  findByLetter(letter: string) {
+    return this.songsRepository
+      .createQueryBuilder('song')
+      .where('LOWER(TRIM(song.title)) LIKE LOWER(:letter)', {
+        letter: `${letter}%`,
+      })
+      .orderBy('song.createdAt', 'DESC')
+      .getMany();
+  }
+
+  findByCategory(category: string) {
+  return this.songsRepository.find({
+    where: { category },
+    order: { title: 'ASC' },
+  });
+}
 }
