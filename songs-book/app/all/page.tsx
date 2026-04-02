@@ -9,7 +9,7 @@ import { fetchSongs, type Song } from "@/lib/api"
 export default async function AllSongsPage() {
 const songs: Song[] = await fetchSongs()
 
-  songs.sort((a, b) => a.title.localeCompare(b.title, "te"))
+  
 
   return (
    <main className="min-h-screen transition-colors duration-1000 overflow-x-hidden">
