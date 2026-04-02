@@ -5,7 +5,7 @@ import Link from "next/link"
 import { Search, Music, LayoutGrid, Library, SortAsc, ListOrdered, Layers, Heart, Bookmark } from "lucide-react"
 
 import Fuse from "fuse.js"
-import { transliterate } from "@/lib/transliterate"
+import { transliterate, phoneticKey } from "@/lib/transliterate"
 
 export default function HomePage() {
 
@@ -15,12 +15,20 @@ const [songs, setSongs] = useState<any[]>([])
 const fuse = useMemo(()=>{
 return new Fuse(
 songs.map((s:any)=>({
-...s,
-tE: transliterate(s.title),
-cE: transliterate(s.category)
+  ...s,
+  tE: transliterate(s.title),
+  pE: phoneticKey(transliterate(s.title)),
+  cE: transliterate(s.category)
 })),
 {
-keys:["title","tE","category","cE"],
+keys: [
+  { name: "title", weight: 0.4 },
+  { name: "tE", weight: 0.3 },
+  { name: "pE", weight: 0.2 },
+  { name: "slug", weight: 0.05 },
+  { name: "category", weight: 0.03 },
+  { name: "cE", weight: 0.02 }
+],
 threshold:0.4,
 ignoreLocation:true
 })

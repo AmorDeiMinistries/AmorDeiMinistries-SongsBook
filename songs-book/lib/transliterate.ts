@@ -56,8 +56,21 @@ export function transliterate(text: string): string {
 function normalize(text: string): string {
   return text
     .toLowerCase()
-    .replace(/h/g, "")       // remove h variations
-    .replace(/aa/g, "a")     // collapse long vowels
-    .replace(/ee/g, "i")
-    .replace(/oo/g, "u")
+    .replace(/h/g, "")
+    .replace(/aa+/g, "a")
+    .replace(/ee+/g, "i")
+    .replace(/ii+/g, "i")
+    .replace(/oo+/g, "u")
+    .replace(/uu+/g, "u")
+    .replace(/yy+/g, "y")
+    .replace(/vv+/g, "v")
+    .replace(/([aeiou])\1+/g, "$1")
+    .replace(/[^a-z]/g, "")
 }
+
+export function phoneticKey(text: string): string {
+  return normalize(text)
+    .replace(/[aeiou]/g, "")
+    .replace(/y/g, "")
+}
+

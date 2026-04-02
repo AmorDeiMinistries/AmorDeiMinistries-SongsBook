@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { fetchSongsByLetter } from "@/lib/api"
 
+export const revalidate = 3600
+
 type Song = {
   id: string
   title: string
