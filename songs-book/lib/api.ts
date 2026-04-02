@@ -13,9 +13,11 @@ export type Category = {
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL!
 
+console.log("NEXT_PUBLIC_API_URL =", process.env.NEXT_PUBLIC_API_URL)
+
 export async function fetchSongs(): Promise<Song[]> {
   const res = await fetch(`${API_URL}/songs`, {
-    cache: "no-store",
+    next: { revalidate: 3600 },
   })
 
   if (!res.ok) {
@@ -27,7 +29,7 @@ export async function fetchSongs(): Promise<Song[]> {
 
 export async function fetchCategories(): Promise<Category[]> {
   const res = await fetch(`${API_URL}/categories`, {
-    cache: "no-store",
+    next: { revalidate: 3600 },
   })
 
   if (!res.ok) {
@@ -157,22 +159,41 @@ export async function logoutAdmin() {
 export async function fetchSongBySlug(
   slug: string
 ): Promise<Song | undefined> {
-  const songs = await fetchSongs()
-  return songs.find((song) => song.slug === slug)
+  const res = await fetch(`${API_URL}/songs/slug/${slug}`, {
+    next: { revalidate: 3600 },
+  })
+
+  if (!res.ok) {
+    return undefined
+  }
+
+  return res.json()
 }
 
 export async function fetchSongsByCategory(
   category: string
 ): Promise<Song[]> {
-  const songs = await fetchSongs()
-  return songs.filter((song) => song.category === category)
+  const res = await fetch(`${API_URL}/songs/category/${category}`, {
+    next: { revalidate: 3600 },
+  })
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch songs by category")
+  }
+
+  return res.json()
 }
 
 export async function fetchSongsByLetter(
   letter: string
 ): Promise<Song[]> {
-  const songs = await fetchSongs()
-  return songs.filter((song) =>
-    song.title.trim().startsWith(letter)
-  )
+  const res = await fetch(`${API_URL}/songs/letter/${letter}`, {
+    next: { revalidate: 3600 },
+  })
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch songs by letter")
+  }
+
+  return res.json()
 }
