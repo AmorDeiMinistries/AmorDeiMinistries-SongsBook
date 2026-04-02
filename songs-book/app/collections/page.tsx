@@ -17,20 +17,32 @@ const [savedSlugs, setSavedSlugs] = useState<string[]>([])
 const [songs, setSongs] = useState<Song[]>([])
 
 useEffect(() => {
-const stored = JSON.parse(localStorage.getItem("myCollection") || "[]")
-setSavedSlugs(stored)
+  const loadCollection = () => {
+    const stored = JSON.parse(
+      localStorage.getItem("myCollection") || "[]"
+    )
+    setSavedSlugs(stored)
 
-fetch(`${process.env.NEXT_PUBLIC_API_URL}/songs`, {
-  cache: "no-store",
-})
-.then((res) => res.json())
-.then((data) => setSongs(data))
-.catch((err) => console.error("Failed to fetch songs", err))
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/songs`)
+      .then((res) => res.json())
+      .then((data) => setSongs(data))
+      .catch((err) =>
+        console.error("Failed to fetch songs", err)
+      )
+  }
+
+  loadCollection()
+
+  window.addEventListener("focus", loadCollection)
+
+  return () => {
+    window.removeEventListener("focus", loadCollection)
+  }
 }, [])
 
-const savedSongs = songs.filter((song) =>
-savedSlugs.includes(song.slug)
-)
+const savedSongs = savedSlugs
+  .map((slug) => songs.find((song) => song.slug === slug))
+  .filter(Boolean) as Song[]
 
 return (
 
