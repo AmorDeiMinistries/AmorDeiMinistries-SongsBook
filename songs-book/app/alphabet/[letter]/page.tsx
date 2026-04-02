@@ -49,10 +49,11 @@ const filteredSongs = await fetchSongsByLetter(decodedLetter)
           <div className="space-y-4">
             {filteredSongs.map((song) => (
               <Link
-                key={song.id}
-                href={`/song/${song.slug}`}
-                className="group block"
-              >
+  key={song.id}
+  href={`/song/${song.slug}`}
+  prefetch={false}
+  className="group block"
+>
                 <div
                   className="
                   p-5 rounded-2xl
