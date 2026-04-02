@@ -27,8 +27,8 @@ export default async function SongPage({
   return (
     <main className="min-h-screen overflow-x-hidden">
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-15%] left-[-10%] w-[600px] h-[600px] bg-blue-400/20 blur-[140px] rounded-full" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-400/20 blur-[140px] rounded-full" />
+        <div className="absolute top-[-15%] left-[-10%] w-[600px] h-[600px] bg-blue-400/20 blur-[60px] rounded-full" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-400/20 blur-[60px] rounded-full" />
       </div>
 
       <div className="relative z-10 max-w-3xl mx-auto px-6 py-24">
