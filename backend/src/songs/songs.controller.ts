@@ -32,4 +32,20 @@ export class SongsController {
   delete(@Param('id') id: string) {
     return this.songsService.delete(Number(id));
   }
+
+  @Get('slug/:slug')
+findBySlug(@Param('slug') slug: string) {
+  return this.songsService.findBySlug(slug);
+}
+
+@Get('letter/:letter')
+findByLetter(@Param('letter') letter: string) {
+  return this.songsService.findByLetter(letter);
+}
+
+@Get('category/:category')
+findByCategory(@Param('category') category: string) {
+  return this.songsService.findByCategory(category);
+}
+
 }
