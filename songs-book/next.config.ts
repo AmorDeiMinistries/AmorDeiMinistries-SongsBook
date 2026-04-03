@@ -3,7 +3,7 @@ const withPWA = require("next-pwa");
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  turbopack: {},
 };
 
 export default withPWA({
@@ -19,7 +19,7 @@ export default withPWA({
         cacheName: "pages-cache",
         expiration: {
           maxEntries: 500,
-          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+          maxAgeSeconds: 60 * 60 * 24 * 30,
         },
       },
     },
