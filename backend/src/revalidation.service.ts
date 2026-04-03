@@ -17,15 +17,15 @@ export class RevalidationService {
   }
 
   async revalidateAllSongs() {
-    try {
-      await fetch(
-        `${this.nextjsUrl}/api/revalidate?secret=${this.secret}&slug=all`
-      );
-      console.log('Revalidated all songs page');
-    } catch (error) {
-      console.error('Failed to revalidate all songs', error);
-    }
+  try {
+    await fetch(
+      `${this.nextjsUrl}/api/revalidate?secret=${this.secret}&slug=all`
+    );
+    console.log('Revalidated all songs page');
+  } catch (error) {
+    console.error('Failed to revalidate all songs', error);
   }
+}
 
   async revalidateCategories() {
     try {

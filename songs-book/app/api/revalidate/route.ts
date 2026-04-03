@@ -14,20 +14,21 @@ export async function GET(request: NextRequest) {
   }
 
   if (slug === 'all') {
-    revalidatePath('/all')
-    revalidatePath('/alphabet')
-    revalidatePath('/type')
-    revalidatePath('/collections')
-    return NextResponse.json({ revalidated: true, path: 'all listing pages' })
-  }
-
+  revalidatePath('/')
+  revalidatePath('/all')
+  revalidatePath('/alphabet')
+  revalidatePath('/type')
+  revalidatePath('/collections')
+  revalidatePath('/type/[category]')  // ← add this
+  return NextResponse.json({ revalidated: true, path: 'all listing pages' })
+}
   // ← ADD THIS BLOCK
   if (slug === 'categories') {
     revalidatePath('/type')
     revalidatePath('/collections')
     return NextResponse.json({ revalidated: true, path: 'category pages' })
   }
-  
+
   if (slug.startsWith('letter-')) {
   const letter = slug.replace('letter-', '')
   revalidatePath(`/alphabet/${letter}`)
