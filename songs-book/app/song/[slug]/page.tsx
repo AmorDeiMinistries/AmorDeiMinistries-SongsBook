@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import AddToCollectionButton from "@/app/components/AddToCollectionButton"
 import NoCopyLyrics from "@/app/NoCopyLyrics"
 import { fetchSongBySlug, fetchSongs } from "@/lib/api"
+export const dynamicParams = true
 
 interface Song {
   id: number
