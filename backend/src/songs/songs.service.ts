@@ -43,19 +43,18 @@ export class SongsService {
   }
 
   async delete(id: number) {
-    const song = await this.songsRepository.findOne({ where: { id } });
-    await this.songsRepository.delete(id);
+  const song = await this.songsRepository.findOne({ where: { id } });
+  await this.songsRepository.delete(id);
 
-    if (song) {
-      // Targeted revalidation (listing pages already exist)
-      await this.revalidationService.revalidateAllSongs();
-      await this.revalidationService.revalidateLetter(song.title);
-      await this.revalidationService.revalidateCategories();
-    }
-
-    return { deleted: true };
+  if (song) {
+    await this.revalidationService.revalidateSong(song.slug);
+    await this.revalidationService.revalidateAllSongs();
+    await this.revalidationService.revalidateLetter(song.title);
+    await this.revalidationService.revalidateCategories();
   }
 
+  return { deleted: true };
+}
   findBySlug(slug: string) {
     return this.songsRepository.findOne({ where: { slug } });
   }
