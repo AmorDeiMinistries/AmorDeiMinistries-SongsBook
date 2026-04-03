@@ -1,16 +1,22 @@
 import { notFound } from "next/navigation"
 import AddToCollectionButton from "@/app/components/AddToCollectionButton"
 import NoCopyLyrics from "@/app/NoCopyLyrics"
-import { fetchSongBySlug } from "@/lib/api"
+import { fetchSongBySlug, fetchSongs } from "@/lib/api"
 
 interface Song {
-  id: string
+  id: number
   title: string
   slug: string
   category: string
   lyrics: string
 }
 
+export async function generateStaticParams() {
+  const songs = await fetchSongs()
+  return songs.map((song) => ({
+    slug: song.slug,
+  }))
+}
 
 
 export default async function SongPage({

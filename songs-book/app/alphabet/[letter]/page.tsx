@@ -1,10 +1,28 @@
 import Link from "next/link"
-import { fetchSongsByLetter } from "@/lib/api"
+import { fetchSongsByLetter,  } from "@/lib/api"
 
-export const revalidate = 3600
+
+
+export async function generateStaticParams() {
+  const letters = [
+    "అ","ఆ","ఇ","ఈ","ఉ","ఊ","ఋ","ఎ","ఏ","ఐ","ఒ","ఓ","ఔ",
+    "క","ఖ","గ","ఘ","ఙ",
+    "చ","ఛ","జ","ఝ","ఞ",
+    "ట","ఠ","డ","ఢ","ణ",
+    "త","థ","ద","ధ","న",
+    "ప","ఫ","బ","భ","మ",
+    "య","ర","ల","వ",
+    "శ","ష","స","హ",
+    "ళ","క్ష","ఱ"
+  ]
+
+  return letters.map((letter) => ({
+    letter: encodeURIComponent(letter),
+  }))
+}
 
 type Song = {
-  id: string
+  id: number
   title: string
   slug: string
   category: string

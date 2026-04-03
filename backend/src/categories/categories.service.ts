@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category } from './category.entity';
 import { Song } from '../songs/song.entity';
+import { RevalidationService } from '../revalidation.service';
 
 @Injectable()
 export class CategoriesService {
@@ -16,6 +17,8 @@ export class CategoriesService {
 
     @InjectRepository(Song)
     private songRepository: Repository<Song>,
+
+    private readonly revalidationService: RevalidationService,
   ) {}
 
   findAll() {
@@ -33,7 +36,12 @@ export class CategoriesService {
       throw new BadRequestException('Category already exists');
     }
 
-    return this.categoryRepository.save({ name });
+    const saved = await this.categoryRepository.save({ name });
+
+    // Revalidate category pages
+    await this.revalidationService.revalidateCategories();
+
+    return saved;
   }
 
   async remove(id: number) {
@@ -55,6 +63,11 @@ export class CategoriesService {
       );
     }
 
-    return this.categoryRepository.delete(id);
+    await this.categoryRepository.delete(id);
+
+    // Revalidate category pages
+    await this.revalidationService.revalidateCategories();
+
+    return { deleted: true };
   }
 }

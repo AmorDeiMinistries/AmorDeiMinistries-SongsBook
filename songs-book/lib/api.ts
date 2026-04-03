@@ -15,27 +15,13 @@ export const API_URL = process.env.NEXT_PUBLIC_API_URL!
 
 console.log("NEXT_PUBLIC_API_URL =", process.env.NEXT_PUBLIC_API_URL)
 
-export async function fetchSongs(): Promise<Song[]> {
-  const res = await fetch(`${API_URL}/songs`, {
-    next: { revalidate: 3600 },
-  })
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch songs")
-  }
-
-  return res.json()
-}
 
 export async function fetchCategories(): Promise<Category[]> {
   const res = await fetch(`${API_URL}/categories`, {
-    next: { revalidate: 3600 },
+    cache: 'force-cache',
   })
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch categories")
-  }
-
+  if (!res.ok) throw new Error("Failed to fetch categories")
   return res.json()
 }
 
@@ -156,44 +142,38 @@ export async function logoutAdmin() {
   return res
 }
 
-export async function fetchSongBySlug(
-  slug: string
-): Promise<Song | undefined> {
+// fetchSongs
+export async function fetchSongs(): Promise<Song[]> {
+  const res = await fetch(`${API_URL}/songs`, {
+    cache: 'force-cache',
+  })
+  if (!res.ok) throw new Error("Failed to fetch songs")
+  return res.json()
+}
+
+// fetchSongBySlug
+export async function fetchSongBySlug(slug: string): Promise<Song | undefined> {
   const res = await fetch(`${API_URL}/songs/slug/${slug}`, {
-    next: { revalidate: 3600 },
+    cache: 'force-cache',
   })
-
-  if (!res.ok) {
-    return undefined
-  }
-
+  if (!res.ok) return undefined
   return res.json()
 }
 
-export async function fetchSongsByCategory(
-  category: string
-): Promise<Song[]> {
+// fetchSongsByCategory
+export async function fetchSongsByCategory(category: string): Promise<Song[]> {
   const res = await fetch(`${API_URL}/songs/category/${category}`, {
-    next: { revalidate: 3600 },
+    cache: 'force-cache',
   })
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch songs by category")
-  }
-
+  if (!res.ok) throw new Error("Failed to fetch songs by category")
   return res.json()
 }
 
-export async function fetchSongsByLetter(
-  letter: string
-): Promise<Song[]> {
+// fetchSongsByLetter
+export async function fetchSongsByLetter(letter: string): Promise<Song[]> {
   const res = await fetch(`${API_URL}/songs/letter/${letter}`, {
-    next: { revalidate: 3600 },
+    cache: 'force-cache',
   })
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch songs by letter")
-  }
-
+  if (!res.ok) throw new Error("Failed to fetch songs by letter")
   return res.json()
 }

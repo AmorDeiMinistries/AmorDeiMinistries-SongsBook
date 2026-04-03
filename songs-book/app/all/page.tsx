@@ -2,14 +2,9 @@ import Link from "next/link"
 import { Music } from "lucide-react"
 import { fetchSongs, type Song } from "@/lib/api"
 
-
-
-
-
 export default async function AllSongsPage() {
 const songs: Song[] = await fetchSongs()
 
-  
 
   return (
    <main className="min-h-screen transition-colors duration-1000 overflow-x-hidden">

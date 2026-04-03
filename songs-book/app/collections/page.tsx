@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 
 interface Song {
-  id: string
+  id: number
   title: string
   slug: string
   category: string
@@ -12,37 +12,38 @@ interface Song {
 }
 
 export default function CollectionsPage() {
+  const [songs, setSongs] = useState<Song[]>([])
+  const [loading, setLoading] = useState(true)
 
-const [savedSlugs, setSavedSlugs] = useState<string[]>([])
-const [songs, setSongs] = useState<Song[]>([])
-
-useEffect(() => {
-  const loadCollection = () => {
-    const stored = JSON.parse(
+  const loadCollection = async () => {
+    const stored: string[] = JSON.parse(
       localStorage.getItem("myCollection") || "[]"
     )
-    setSavedSlugs(stored)
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/songs`)
-      .then((res) => res.json())
-      .then((data) => setSongs(data))
-      .catch((err) =>
-        console.error("Failed to fetch songs", err)
+    if (stored.length === 0) {
+      setSongs([])
+      setLoading(false)
+      return
+    }
+
+    // Fetch only saved songs by slug individually
+    const fetched = await Promise.all(
+      stored.map((slug) =>
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/songs/slug/${slug}`)
+          .then((res) => res.json())
+          .catch(() => null)
       )
+    )
+
+    setSongs(fetched.filter(Boolean))
+    setLoading(false)
   }
 
-  loadCollection()
-
-  window.addEventListener("focus", loadCollection)
-
-  return () => {
-    window.removeEventListener("focus", loadCollection)
-  }
-}, [])
-
-const savedSongs = savedSlugs
-  .map((slug) => songs.find((song) => song.slug === slug))
-  .filter(Boolean) as Song[]
+  useEffect(() => {
+    loadCollection()
+    window.addEventListener("focus", loadCollection)
+    return () => window.removeEventListener("focus", loadCollection)
+  }, [])
 
 return (
 
@@ -95,19 +96,18 @@ return (
 
 {/* SONG LIST */}
 
-{savedSongs.length === 0 ? (
-
-<div className="text-center py-20 text-slate-500 dark:text-slate-400">
-
-No songs added yet.
-
-</div>
-
-) : (
-
+ {loading ? (
+          <div className="text-center py-20 text-slate-500 dark:text-slate-400">
+            Loading...
+          </div>
+        ) : songs.length === 0 ? (
+          <div className="text-center py-20 text-slate-500 dark:text-slate-400">
+            No songs added yet.
+          </div>
+        ) : (
 <div className="space-y-4">
 
-{savedSongs.map((song) => (
+{songs.map((song) => (
 
 <Link
 key={song.id}

@@ -2,37 +2,60 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Song } from './song.entity';
+import { RevalidationService } from '../revalidation.service';
 
 @Injectable()
 export class SongsService {
   constructor(
     @InjectRepository(Song)
     private readonly songsRepository: Repository<Song>,
+    private readonly revalidationService: RevalidationService,
   ) {}
 
   findAll() {
-  return this.songsRepository.find({
-    order: { title: 'ASC' },
-  });
-}
+    return this.songsRepository.find({
+      order: { title: 'ASC' },
+    });
+  }
 
-  create(songData: Partial<Song>) {
+  async create(songData: Partial<Song>) {
     const song = this.songsRepository.create(songData);
-    return this.songsRepository.save(song);
+    const saved = await this.songsRepository.save(song);
+
+    await this.revalidationService.revalidateSong(saved.slug);
+    await this.revalidationService.revalidateAllSongs();
+    await this.revalidationService.revalidateLetter(saved.title);
+
+    return saved;
   }
 
-  update(id: number, songData: Partial<Song>) {
-    return this.songsRepository.update(id, songData);
+  async update(id: number, songData: Partial<Song>) {
+    await this.songsRepository.update(id, songData);
+
+    const updated = await this.songsRepository.findOne({ where: { id } });
+    if (updated) {
+      await this.revalidationService.revalidateSong(updated.slug);
+      await this.revalidationService.revalidateAllSongs();
+      await this.revalidationService.revalidateLetter(updated.title);
+    }
+
+    return updated;
   }
 
-  delete(id: number) {
-    return this.songsRepository.delete(id);
+  async delete(id: number) {
+    const song = await this.songsRepository.findOne({ where: { id } });
+    await this.songsRepository.delete(id);
+
+    if (song) {
+      await this.revalidationService.revalidateAllSongs();
+      await this.revalidationService.revalidateLetter(song.title);
+    }
+
+    return { deleted: true };
   }
 
   findBySlug(slug: string) {
-    return this.songsRepository.findOne({
-      where: { slug },
-    });
+    return this.songsRepository.findOne({ where: { slug } });
   }
 
   findByLetter(letter: string) {
@@ -46,9 +69,9 @@ export class SongsService {
   }
 
   findByCategory(category: string) {
-  return this.songsRepository.find({
-    where: { category },
-    order: { title: 'ASC' },
-  });
-}
+    return this.songsRepository.find({
+      where: { category },
+      order: { title: 'ASC' },
+    });
+  }
 }

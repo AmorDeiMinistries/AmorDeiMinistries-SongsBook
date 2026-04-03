@@ -1,29 +1,16 @@
-"use client"
+
 import { fetchCategories } from "@/lib/api"
 
 import Link from "next/link"
-import { useEffect, useState } from "react"
+
 
 interface Category {
   id: number
   name: string
 }
 
-export default function SongTypesPage() {
-  const [categories, setCategories] = useState<Category[]>([])
-
-  useEffect(() => {
-    const loadCategories = async () => {
-      try {
-  const data = await fetchCategories()
-  setCategories(data)
-} catch (error) {
-  console.error("Failed to fetch categories")
-}
-    }
-
-    loadCategories()
-  }, [])
+export default async function SongTypesPage() {
+  const categories = await fetchCategories()
 
 return (
 

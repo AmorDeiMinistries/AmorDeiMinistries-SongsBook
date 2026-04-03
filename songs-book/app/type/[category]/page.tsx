@@ -1,9 +1,15 @@
 import Link from "next/link"
-import { fetchSongsByCategory } from "@/lib/api"
+import { fetchSongsByCategory, fetchCategories } from "@/lib/api"
 
+export async function generateStaticParams() {
+  const categories = await fetchCategories()
+  return categories.map((cat) => ({
+    category: encodeURIComponent(cat.name),
+  }))
+}
 
 type Song = {
-  id: string
+  id: number
   title: string
   slug: string
   category: string
