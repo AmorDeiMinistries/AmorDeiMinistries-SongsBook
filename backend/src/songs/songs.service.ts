@@ -22,7 +22,7 @@ export class SongsService {
     const song = this.songsRepository.create(songData);
     const saved = await this.songsRepository.save(song);
 
-    // Full rebuild for new song
+    // Full rebuild for new song (page doesn't exist yet)
     await this.revalidationService.triggerFullRebuild();
 
     return saved;
@@ -33,8 +33,10 @@ export class SongsService {
 
     const updated = await this.songsRepository.findOne({ where: { id } });
     if (updated) {
-      // Full rebuild to ensure all pages are updated
-      await this.revalidationService.triggerFullRebuild();
+      // Targeted revalidation (page already exists)
+      await this.revalidationService.revalidateSong(updated.slug);
+      await this.revalidationService.revalidateAllSongs();
+      await this.revalidationService.revalidateLetter(updated.title);
     }
 
     return updated;
@@ -45,8 +47,10 @@ export class SongsService {
     await this.songsRepository.delete(id);
 
     if (song) {
-      // Full rebuild to ensure all pages are updated
-      await this.revalidationService.triggerFullRebuild();
+      // Targeted revalidation (listing pages already exist)
+      await this.revalidationService.revalidateAllSongs();
+      await this.revalidationService.revalidateLetter(song.title);
+      await this.revalidationService.revalidateCategories();
     }
 
     return { deleted: true };
