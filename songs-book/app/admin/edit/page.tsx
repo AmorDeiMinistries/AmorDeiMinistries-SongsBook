@@ -45,21 +45,22 @@ export default function ManageSongsPage() {
     loadSongs()
   }, [])
 
-  const handleDelete = async (id: number) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this song?"
-    )
+const handleDelete = async (id: number) => {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this song?"
+  )
 
-    if (!confirmDelete) return
+  if (!confirmDelete) return
 
-    try {
-     await deleteSong(id)
-      setMessage("Success: Song deleted successfully")
-      loadSongs()
-    } catch (error) {
-      setMessage("Error: Failed to delete song")
-    }
+  try {
+    await deleteSong(id)
+    // Remove from local state immediately instead of refetching
+    setSongs((prev) => prev.filter((song) => song.id !== id))
+    setMessage("Success: Song deleted successfully")
+  } catch (error) {
+    setMessage("Error: Failed to delete song")
   }
+}
 
   const handleEdit = (song: Song) => {
     setEditingSong(song)
@@ -69,23 +70,31 @@ export default function ManageSongsPage() {
   }
 
   const handleUpdate = async () => {
-    if (!editingSong) return
+  if (!editingSong) return
 
-    try {
+  try {
     await updateSong(editingSong.id, {
-  title: editTitle,
-  lyrics: editLyrics,
-})
+      title: editTitle,
+      lyrics: editLyrics,
+    })
 
-      setMessage("Success: Song updated successfully")
-      setEditingSong(null)
-      setEditTitle("")
-      setEditLyrics("")
-      loadSongs()
-    } catch (error) {
-      setMessage("Error: Failed to update song")
-    }
+    // Update local state directly instead of refetching
+    setSongs((prev) =>
+      prev.map((song) =>
+        song.id === editingSong.id
+          ? { ...song, title: editTitle, lyrics: editLyrics }
+          : song
+      )
+    )
+
+    setMessage("Success: Song updated successfully")
+    setEditingSong(null)
+    setEditTitle("")
+    setEditLyrics("")
+  } catch (error) {
+    setMessage("Error: Failed to update song")
   }
+}
 
   return (
     <main className="min-h-screen bg-slate-50/50 p-6 md:p-12 lg:p-16">
