@@ -28,27 +28,34 @@ export class RevalidationService {
   }
 
   async revalidateCategories() {
-  try {
-    await fetch(
-      `${this.nextjsUrl}/api/revalidate?secret=${this.secret}&slug=categories`
-    )
-    console.log('Revalidated categories pages')
-  } catch (error) {
-    console.error('Failed to revalidate categories', error)
+    try {
+      await fetch(
+        `${this.nextjsUrl}/api/revalidate?secret=${this.secret}&slug=categories`
+      );
+      console.log('Revalidated categories pages');
+    } catch (error) {
+      console.error('Failed to revalidate categories', error);
+    }
   }
-}
 
-async revalidateLetter(title: string) {
-  try {
-    // Get first character of title to determine letter
-    const firstChar = encodeURIComponent(title.trim().charAt(0))
-    await fetch(
-      `${this.nextjsUrl}/api/revalidate?secret=${this.secret}&slug=letter-${firstChar}`
-    )
-    console.log(`Revalidated letter page: ${firstChar}`)
-  } catch (error) {
-    console.error('Failed to revalidate letter page', error)
+  async revalidateLetter(title: string) {
+    try {
+      const firstChar = encodeURIComponent(title.trim().charAt(0));
+      await fetch(
+        `${this.nextjsUrl}/api/revalidate?secret=${this.secret}&slug=letter-${firstChar}`
+      );
+      console.log(`Revalidated letter page: ${firstChar}`);
+    } catch (error) {
+      console.error('Failed to revalidate letter page', error);
+    }
   }
-}
 
+  async triggerFullRebuild() {
+    try {
+      await fetch(process.env.VERCEL_DEPLOY_HOOK!, { method: 'POST' });
+      console.log('Triggered full Vercel rebuild');
+    } catch (error) {
+      console.error('Failed to trigger rebuild', error);
+    }
+  }
 }

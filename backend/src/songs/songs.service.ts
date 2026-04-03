@@ -22,9 +22,8 @@ export class SongsService {
     const song = this.songsRepository.create(songData);
     const saved = await this.songsRepository.save(song);
 
-    await this.revalidationService.revalidateSong(saved.slug);
-    await this.revalidationService.revalidateAllSongs();
-    await this.revalidationService.revalidateLetter(saved.title);
+    // Full rebuild for new song
+    await this.revalidationService.triggerFullRebuild();
 
     return saved;
   }

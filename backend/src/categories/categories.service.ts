@@ -38,8 +38,8 @@ export class CategoriesService {
 
     const saved = await this.categoryRepository.save({ name });
 
-    // Revalidate category pages
-    await this.revalidationService.revalidateCategories();
+    // Full rebuild for new category
+    await this.revalidationService.triggerFullRebuild();
 
     return saved;
   }
