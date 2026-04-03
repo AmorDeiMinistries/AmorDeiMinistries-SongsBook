@@ -3,8 +3,9 @@ import { fetchSongsByCategory, fetchCategories } from "@/lib/api"
 
 export async function generateStaticParams() {
   const categories = await fetchCategories()
+
   return categories.map((cat) => ({
-    category: encodeURIComponent(cat.name),
+    category: cat.name,
   }))
 }
 
