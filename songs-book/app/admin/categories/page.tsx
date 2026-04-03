@@ -31,36 +31,36 @@ export default function ManageCategoriesPage() {
     loadCategories()
   }, [])
 
-  const handleAdd = async () => {
-    if (!newCategory.trim()) return
+ const handleAdd = async () => {
+  if (!newCategory.trim()) return
 
-    try {
-      await createCategory(newCategory)
-
-      setMessage("Success: Category added successfully")
-      setNewCategory("")
-      loadCategories()
-    } catch {
-      setMessage("Error: Failed to add category")
-    }
+  try {
+    const saved = await createCategory(newCategory)
+    // Update local state directly
+    setCategories((prev) => [...prev, saved].sort((a, b) => a.name.localeCompare(b.name)))
+    setMessage("Success: Category added successfully")
+    setNewCategory("")
+  } catch {
+    setMessage("Error: Failed to add category")
   }
+}
 
-  const handleDelete = async (id: number) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this category?"
-    )
+const handleDelete = async (id: number) => {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this category?"
+  )
 
-    if (!confirmDelete) return
+  if (!confirmDelete) return
 
-    try {
-      await deleteCategory(id)
-
-      setMessage("Success: Category deleted successfully")
-      loadCategories()
-    } catch {
-      setMessage("Error: Failed to delete category")
-    }
+  try {
+    await deleteCategory(id)
+    // Remove from local state directly
+    setCategories((prev) => prev.filter((cat) => cat.id !== id))
+    setMessage("Success: Category deleted successfully")
+  } catch (error: any) {
+    setMessage(`Error: ${error.message || "Failed to delete category"}`)
   }
+}
 
   return (
     <main className="min-h-screen bg-slate-50/50 p-6 md:p-12 lg:p-16">

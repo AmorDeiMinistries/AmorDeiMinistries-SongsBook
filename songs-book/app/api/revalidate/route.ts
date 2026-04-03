@@ -13,21 +13,22 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ message: 'Missing slug' }, { status: 400 })
   }
 
-  if (slug === 'all') {
+ if (slug === 'all') {
   revalidatePath('/')
   revalidatePath('/all')
   revalidatePath('/alphabet')
   revalidatePath('/type')
   revalidatePath('/collections')
-  revalidatePath('/type/[category]')  // ← add this
+  revalidatePath('/type/[category]', 'page')  // ← add 'page' type
   return NextResponse.json({ revalidated: true, path: 'all listing pages' })
 }
   // ← ADD THIS BLOCK
-  if (slug === 'categories') {
-    revalidatePath('/type')
-    revalidatePath('/collections')
-    return NextResponse.json({ revalidated: true, path: 'category pages' })
-  }
+ if (slug === 'categories') {
+  revalidatePath('/type')
+  revalidatePath('/collections')
+  revalidatePath('/type/[category]', 'page')  // ← add 'page' type
+  return NextResponse.json({ revalidated: true, path: 'category pages' })
+}
 
   if (slug.startsWith('letter-')) {
   const letter = slug.replace('letter-', '')
