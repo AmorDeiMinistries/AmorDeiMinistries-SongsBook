@@ -33,9 +33,8 @@ export class SongsService {
 
     const updated = await this.songsRepository.findOne({ where: { id } });
     if (updated) {
-      await this.revalidationService.revalidateSong(updated.slug);
-      await this.revalidationService.revalidateAllSongs();
-      await this.revalidationService.revalidateLetter(updated.title);
+      // Full rebuild to ensure all pages are updated
+      await this.revalidationService.triggerFullRebuild();
     }
 
     return updated;
@@ -46,8 +45,8 @@ export class SongsService {
     await this.songsRepository.delete(id);
 
     if (song) {
-      await this.revalidationService.revalidateAllSongs();
-      await this.revalidationService.revalidateLetter(song.title);
+      // Full rebuild to ensure all pages are updated
+      await this.revalidationService.triggerFullRebuild();
     }
 
     return { deleted: true };
