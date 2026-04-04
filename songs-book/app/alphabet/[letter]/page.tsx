@@ -16,8 +16,8 @@ export async function generateStaticParams() {
     "ళ","క్ష","ఱ"
   ]
 
- return letters.map((letter) => ({
-  letter,
+return letters.map((letter) => ({
+  letter: encodeURIComponent(letter),
 }))
 }
 
