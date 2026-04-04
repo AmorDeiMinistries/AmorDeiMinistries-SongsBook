@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
 
   if (slug.startsWith('letter-')) {
   const letter = slug.replace('letter-', '')
-  revalidatePath(`/alphabet/${letter}`)
+  revalidatePath(`/alphabet/${encodeURIComponent(letter)}`)  // ← add encodeURIComponent
   return NextResponse.json({ revalidated: true, path: `/alphabet/${letter}` })
 }
 
