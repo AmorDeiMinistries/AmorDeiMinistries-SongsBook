@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Search } from "lucide-react"
 import Fuse from "fuse.js"
 import { transliterate, phoneticKey } from "@/lib/transliterate"
+import { useRouter } from "next/navigation"
 
 interface Song {
   id: number
@@ -16,7 +17,11 @@ interface Song {
 
 export default function HomeSearch({ songs }: { songs: Song[] }) {
   const [search, setSearch] = useState("")
+const router = useRouter()
 
+const isAdminTrigger =
+  search.trim().toLowerCase() === "amor_dei_ministries"
+  
   const fuse = useMemo(() => {
     return new Fuse(
       songs.map((s) => ({
@@ -56,15 +61,23 @@ export default function HomeSearch({ songs }: { songs: Song[] }) {
         <div className="absolute inset-x-4 top-[2px] h-[2px] bg-white/90 blur-sm rounded-full"/>
         <Search className="text-slate-400"/>
         <input
-          type="text"
-          placeholder="Search songs..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-transparent outline-none text-[16px]"
-        />
+  type="text"
+  placeholder="Search songs..."
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  onKeyDown={(e) => {
+    if (
+      e.key === "Enter" &&
+      search.trim().toLowerCase() === "amor_dei_ministries"
+    ) {
+      router.push("/admin/login")
+    }
+  }}
+  className="w-full bg-transparent outline-none text-[16px]"
+/>
       </div>
 
-      {search && (
+      {search && !isAdminTrigger && (
         <div className="absolute z-50 w-full mt-4 rounded-3xl bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-white/60 shadow-[0_30px_60px_rgba(0,0,0,0.2)] max-h-[400px] overflow-y-auto">
           {results.length === 0 && (
             <div className="p-10 text-center text-sm opacity-40">No songs found</div>

@@ -17,7 +17,7 @@ export async function generateStaticParams() {
   ]
 
 return letters.map((letter) => ({
-  letter: encodeURIComponent(letter),
+  letter,
 }))
 }
 
