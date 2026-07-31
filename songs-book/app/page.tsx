@@ -26,9 +26,28 @@ export default async function HomePage() {
         <header className="relative mb-36 flex flex-col items-center">
           <div className="absolute -top-24 w-[min(90vw,600px)] h-[300px] bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 blur-[120px] opacity-40"/>
 
-          <h1 className="relative text-center text-6xl sm:text-7xl md:text-8xl font-black leading-none">
-  <span className="bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-700 bg-clip-text text-transparent drop-shadow-[0_8px_30px_rgba(37,99,235,0.35)]">
-    Amor Dei
+          <h1 className="text-center text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-none">
+  <span
+    className="
+      bg-gradient-to-b
+      from-white
+      via-slate-100
+      to-slate-400
+      bg-clip-text
+      text-transparent
+      drop-shadow-[0_2px_0_#cbd5e1]
+    "
+    style={{
+      textShadow: `
+        0 1px 0 #d1d5db,
+        0 2px 0 #cbd5e1,
+        0 3px 0 #94a3b8,
+        0 6px 12px rgba(0,0,0,0.25),
+        0 18px 40px rgba(37,99,235,0.20)
+      `,
+    }}
+  >
+    AMOR DEI
   </span>
 </h1>
 
