@@ -58,9 +58,9 @@ export default async function HomePage() {
 
           <div className="w-full flex items-center justify-between mt-6 px-1 max-w-xl">
             <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-slate-300 to-transparent"/>
-            <span className="mx-8 text-sm md:text-lg font-light tracking-[1.6em] uppercase text-slate-400 whitespace-nowrap pl-[1.5em]">
-              Ministries
-            </span>
+           <span className="mx-8 text-sm md:text-lg font-semibold tracking-[1.6em] uppercase text-slate-700 dark:text-slate-300 whitespace-nowrap pl-[1.5em]">
+  Ministries
+</span>
             <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-slate-300 to-transparent"/>
           </div>
 
