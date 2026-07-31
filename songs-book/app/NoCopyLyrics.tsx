@@ -70,4 +70,3 @@ export default function NoCopyLyrics({ lyrics }: { lyrics: string }) {
     </div>
   )
 }
- 
