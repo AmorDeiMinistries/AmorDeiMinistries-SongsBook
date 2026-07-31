@@ -42,14 +42,14 @@ export default async function HomePage() {
 
           <div className="mt-16 max-w-xl mx-auto text-center bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md border border-white/60 dark:border-white/10 rounded-2xl px-10 py-8 shadow-lg">
             <p className="text-xl md:text-2xl font-semibold text-slate-700 dark:text-slate-200 leading-relaxed">
-              Sing joyfully to the Lord, you righteous<br/>
-              It is fitting for the upright to praise Him
+              let us sing to the Lord<br/>
+              let us make a joyful noise to the Rock of our salvation.
             </p>
             <div className="mt-6 flex justify-center">
               <div className="h-[2px] w-10 bg-blue-500 rounded-full"></div>
             </div>
             <p className="mt-4 text-xs tracking-[0.35em] text-slate-400 uppercase font-semibold">
-              Psalm 33:1
+              Psalm 95:1
             </p>
           </div>
         </header>
