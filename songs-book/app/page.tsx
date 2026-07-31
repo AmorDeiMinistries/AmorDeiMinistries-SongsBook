@@ -31,10 +31,24 @@ export default async function HomePage() {
     className="text-white"
     style={{
       textShadow: `
-        0 1px 0 rgba(255,255,255,.8),
-        0 2px 0 rgba(255,255,255,.5),
-        0 4px 8px rgba(0,0,0,.25),
-        0 15px 35px rgba(0,0,0,.25)
+        /* Dark Outline */
+        -2px -2px 0 #111827,
+         2px -2px 0 #111827,
+        -2px  2px 0 #111827,
+         2px  2px 0 #111827,
+        -2px  0px 0 #111827,
+         2px  0px 0 #111827,
+         0px -2px 0 #111827,
+         0px  2px 0 #111827,
+
+        /* 3D Depth */
+        0 1px 0 #d1d5db,
+        0 2px 0 #cbd5e1,
+        0 3px 0 #94a3b8,
+
+        /* Shadow */
+        0 8px 20px rgba(0,0,0,0.35),
+        0 18px 40px rgba(0,0,0,0.25)
       `,
     }}
   >
