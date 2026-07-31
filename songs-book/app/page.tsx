@@ -26,24 +26,15 @@ export default async function HomePage() {
         <header className="relative mb-36 flex flex-col items-center">
           <div className="absolute -top-24 w-[min(90vw,600px)] h-[300px] bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 blur-[120px] opacity-40"/>
 
-          <h1 className="text-center text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-none">
+          <h1 className="text-center text-6xl sm:text-7xl md:text-8xl font-black">
   <span
-    className="
-      bg-gradient-to-b
-      from-white
-      via-slate-100
-      to-slate-400
-      bg-clip-text
-      text-transparent
-      drop-shadow-[0_2px_0_#cbd5e1]
-    "
+    className="bg-gradient-to-b from-yellow-200 via-amber-400 to-amber-700 bg-clip-text text-transparent"
     style={{
       textShadow: `
-        0 1px 0 #d1d5db,
-        0 2px 0 #cbd5e1,
-        0 3px 0 #94a3b8,
-        0 6px 12px rgba(0,0,0,0.25),
-        0 18px 40px rgba(37,99,235,0.20)
+        0 1px 0 #fde68a,
+        0 2px 0 #fbbf24,
+        0 3px 0 #d97706,
+        0 8px 18px rgba(0,0,0,.35)
       `,
     }}
   >
