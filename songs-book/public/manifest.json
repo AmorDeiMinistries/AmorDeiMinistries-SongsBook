@@ -1,6 +1,6 @@
 {
-  "name": "Songs Book",
-  "short_name": "SongsBook",
+  "name": "Amor Dei Songs Book",
+"short_name": "AmorDei Songs",
   "description": "Sacred Telugu Christian songs archive for worship and devotion",
   "start_url": "/",
   "display": "standalone",
