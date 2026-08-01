@@ -146,7 +146,6 @@ export default async function HomePage() {
             >
               Amor Dei
             </h1>
-
           </div>
 
           <div className="mt-2 flex items-center justify-center gap-2">
